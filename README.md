@@ -1,6 +1,6 @@
-# Electron-Vite Starter-Kit
+# Electron-Vite React Starter-Kit
 
-This is a simple project to get you started with Electron. It uses Electron-Vite to manage the Electron app and vanilla JavaScript for the main interface.
+This is a simple project to get you started with Electron and React. It uses Electron-Vite to manage the Electron app and vanilla JavaScript for the main interface.
 
 All the technologies used in this project are:
 
