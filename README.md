@@ -1,6 +1,6 @@
 # Electron-Vite React Starter-Kit
 
-This is a simple project to get you started with Electron and React. It uses Electron-Vite to manage the Electron app and vanilla JavaScript for the main interface.
+This is a simple project to get you started with Electron and React. It uses Electron-Vite to manage the Electron app and React for the main interface.
 
 All the technologies used in this project are:
 
@@ -16,7 +16,7 @@ All the technologies used in this project are:
 
 ## Getting Started
 
-To get started with this project, you click the "Use this template" button on the top right of this page or click [here](). This will create a new repository with the same structure as this one.
+To get started with this project, you click the "Use this template" button on the top right of this page or click [here](https://github.com/new?template_name=STARTER.ElectronVite-React&template_owner=iNKORE-NET). This will create a new repository with the same structure as this one.
 
 Clone the repository to your local machine, locate to `packages/app-browser` and run the following commands:
 
