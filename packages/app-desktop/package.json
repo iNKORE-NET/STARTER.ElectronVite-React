@@ -2,7 +2,7 @@
     "name": "app-desktop",
     "version": "1.0.0",
     "description": "An Electron application with React and TypeScript",
-    "main": "./out/main/index.js",
+    "main": "./.application/main/index.js",
     "scripts": 
     {
         "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
