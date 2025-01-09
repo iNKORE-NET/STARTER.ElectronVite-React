@@ -1,6 +1,8 @@
-import path, { resolve } from "path"
-import { bytecodePlugin, defineConfig, externalizeDepsPlugin, type ElectronViteConfig } from "electron-vite"
-import react from "@vitejs/plugin-react"
+import path from "path";
+import fs from "fs";
+
+import { bytecodePlugin, defineConfig, externalizeDepsPlugin, type ElectronViteConfig } from "electron-vite";
+import react from "@vitejs/plugin-react";
 
 const protectedStrings: string[] =
 [
@@ -8,11 +10,39 @@ const protectedStrings: string[] =
 ]
 
 /** If you change this, you must also change the 'main' field in the package.json */
-const outDir = resolve("./.application");
+const outDir = path.resolve("./.application");
+
+const allWindows = (() => 
+{
+    const pageEntry: any = {};
+    const winsRoot = path.resolve("./sources/renderer/source/windows");
+    // glob.sync(path.join(winsRoot, '**/index.html')).forEach((entry) => 
+    // {
+    //     const pathArr = entry.split('/');
+    //     const name = pathArr[pathArr.length - 2];
+    //     pageEntry[name] = path.join(winsRoot, name, "index.html");
+    // });
+
+    fs.readdirSync(winsRoot).forEach((name) =>
+    {
+        const indexHTML = path.join(winsRoot, name, "index.html");
+        if (!fs.existsSync(indexHTML)) return;
+        pageEntry[name] = indexHTML;
+    });
+    
+    return pageEntry;
+})();
+
+const COMMON_ALIASES =
+{
+    "common": path.resolve("sources/common"),
+    "sources": path.resolve("sources"),
+}
+
+
 
 const CONFIG: ElectronViteConfig = 
 {
-    
     main: 
     {
         plugins: 
@@ -25,6 +55,11 @@ const CONFIG: ElectronViteConfig =
         { 
             lib: { entry: "sources/main" },
             outDir: path.join(outDir, "main")
+        },
+
+        resolve:
+        {
+            alias: { ...COMMON_ALIASES, "source": path.resolve("sources/main") }
         }
     },
     preload: 
@@ -44,12 +79,7 @@ const CONFIG: ElectronViteConfig =
     {
         resolve: 
         {
-            alias: 
-            { 
-                "source": resolve("sources/renderer/source"),
-                "sources": resolve("sources"),
-                "modules": resolve("sources/renderer"),
-            }
+            alias: { ...COMMON_ALIASES, "source": path.resolve("sources/renderer/source") }
         },
         
         plugins: 
@@ -60,11 +90,14 @@ const CONFIG: ElectronViteConfig =
         ],
 
         root: "sources/renderer",
-        publicDir: resolve("sources/renderer/public"),
+        publicDir: path.resolve("sources/renderer/public"),
         build:
         { 
-            rollupOptions: { input: "sources/renderer/index.html" },
-            outDir: path.join(outDir, "renderer")
+            rollupOptions: 
+            { 
+                input: allWindows,
+            },
+            outDir: path.join(outDir, "renderer"),
         }
     },
 }

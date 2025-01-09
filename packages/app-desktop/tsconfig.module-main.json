@@ -1,0 +1,15 @@
+{
+    "include": [ "electron.vite.config.*", "sources/main/**/*" ],
+    "extends": "./tsconfig.env-node.json",
+    "compilerOptions":
+    {
+        "baseUrl": ".",
+        "paths":
+        {
+            "sources/*": [ "sources/*" ], "common/*": [ "sources/common/*" ],
+
+            "source/*": [ "sources/main/*" ],
+            "module/*": [ "sources/main/*" ]
+        },
+    }
+}

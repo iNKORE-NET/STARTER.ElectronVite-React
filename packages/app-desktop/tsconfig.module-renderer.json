@@ -1,0 +1,22 @@
+{
+    "extends": "./tsconfig.env-web.json",
+    "compilerOptions":
+    {
+        "composite": true,
+        "jsx": "react-jsx",
+
+        "baseUrl": ".",
+        "paths":
+        {
+            "source/*": [ "sources/renderer/source/*" ],
+            "module/*": [ "sources/renderer/*" ]
+        }
+    },
+    "include":
+    [
+        "sources/renderer/source/env.d.ts",
+        "sources/renderer/source/**/*",
+        "sources/renderer/source/**/*.tsx",
+        "sources/preload/*.d.ts"
+    ],
+}
