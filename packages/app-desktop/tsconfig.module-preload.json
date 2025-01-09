@@ -1,0 +1,14 @@
+{
+    "include": [ "sources/preload/**/*" ],
+    "extends": "./tsconfig.env-node.json",
+    "compilerOptions":
+    {
+        "composite": true,
+        "baseUrl": ".",
+        "paths":
+        {
+            "source/*": [ "sources/preload/*" ],
+            "module/*": [ "sources/preload/*" ]
+        }
+    }
+}

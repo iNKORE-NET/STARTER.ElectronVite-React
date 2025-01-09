@@ -2,7 +2,7 @@
     "name": "app-desktop",
     "version": "1.0.0",
     "description": "An Electron application with React and TypeScript",
-    "main": "./out/main/index.js",
+    "main": "./.application/main/index.js",
     "scripts": 
     {
         "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
@@ -10,7 +10,7 @@
         "typecheck": "npm run typecheck:node && npm run typecheck:web",
         "start": "electron-vite preview",
         "dev": "electron-vite dev",
-        "build": "npm run typecheck && electron-vite build",
+        "build": "electron-vite build",
         "postinstall": "electron-builder install-app-deps",
         "build:unpack": "npm run build && electron-builder --dir",
         "build:win": "npm run build && electron-builder --win",
@@ -21,22 +21,26 @@
     "dependencies": 
     {
         "@electron-toolkit/preload": "^3.0.1",
-        "@electron-toolkit/utils": "^3.0.0"
+        "@electron-toolkit/utils": "^3.0.0",
+        "react-helmet-async": "^2.0.5",
+        "react-router": "^7.1.1",
+        "react-router-dom": "^7.1.1",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1"
     },
     "devDependencies": 
     {
         "@electron-toolkit/eslint-config-prettier": "^2.0.0",
         "@electron-toolkit/eslint-config-ts": "^2.0.0",
         "@electron-toolkit/tsconfig": "^1.0.1",
-        "@types/node": "^20.14.8",
+        "@types/node": "^20.17.12",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
         "@vitejs/plugin-react": "^4.3.1",
         "electron": "^31.0.2",
         "electron-builder": "^24.13.3",
         "electron-vite": "^2.3.0",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
+        "glob": "^11.0.0",
         "typescript": "^5.5.2",
         "vite": "^5.3.1"
     }

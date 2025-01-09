@@ -1,11 +1,45 @@
-import { resolve } from "path"
-import { bytecodePlugin, defineConfig, externalizeDepsPlugin, type ElectronViteConfig } from "electron-vite"
-import react from "@vitejs/plugin-react"
+import path from "path";
+import fs from "fs";
+
+import { bytecodePlugin, defineConfig, externalizeDepsPlugin, type ElectronViteConfig } from "electron-vite";
+import react from "@vitejs/plugin-react";
 
 const protectedStrings: string[] =
 [
 
 ]
+
+/** If you change this, you must also change the 'main' field in the package.json */
+const outDir = path.resolve("./.application");
+
+const allWindows = (() => 
+{
+    const pageEntry: any = {};
+    const winsRoot = path.resolve("./sources/renderer/source/windows");
+    // glob.sync(path.join(winsRoot, '**/index.html')).forEach((entry) => 
+    // {
+    //     const pathArr = entry.split('/');
+    //     const name = pathArr[pathArr.length - 2];
+    //     pageEntry[name] = path.join(winsRoot, name, "index.html");
+    // });
+
+    fs.readdirSync(winsRoot).forEach((name) =>
+    {
+        const indexHTML = path.join(winsRoot, name, "index.html");
+        if (!fs.existsSync(indexHTML)) return;
+        pageEntry[name] = indexHTML;
+    });
+    
+    return pageEntry;
+})();
+
+const COMMON_ALIASES =
+{
+    "common": path.resolve("sources/common"),
+    "sources": path.resolve("sources"),
+}
+
+
 
 const CONFIG: ElectronViteConfig = 
 {
@@ -17,7 +51,16 @@ const CONFIG: ElectronViteConfig =
             bytecodePlugin({ protectedStrings })
         ],
 
-        build: { lib: { entry: "sources/main" }}
+        build:
+        { 
+            lib: { entry: "sources/main" },
+            outDir: path.join(outDir, "main")
+        },
+
+        resolve:
+        {
+            alias: { ...COMMON_ALIASES, "source": path.resolve("sources/main") }
+        }
     },
     preload: 
     {
@@ -26,30 +69,36 @@ const CONFIG: ElectronViteConfig =
             externalizeDepsPlugin()
         ],
 
-        build: { lib: { entry: "sources/preload" }}
+        build: 
+        { 
+            lib: { entry: "sources/preload" },
+            outDir: path.join(outDir, "preload")
+        }
     },
     renderer: 
     {
         resolve: 
         {
-            alias: 
-            { 
-                "source": resolve("sources/renderer/source"),
-                "sources": resolve("sources"),
-                "modules": resolve("sources/renderer"),
-            }
+            alias: { ...COMMON_ALIASES, "source": path.resolve("sources/renderer/source") }
         },
         
         plugins: 
         [
+            // externalizeDepsPlugin(),
             react(),
-            // bytecodePlugin({ protectedStrings }) // Fuck, this plugin is currently not supported in renderer process
+            // bytecodePlugin({ protectedStrings }) // Fck, this plugin is currently not supported in renderer process
         ],
 
         root: "sources/renderer",
-        publicDir: resolve("sources/renderer/public"),
+        publicDir: path.resolve("sources/renderer/public"),
         build:
-        { rollupOptions: { input: "sources/renderer/index.html" }}
+        { 
+            rollupOptions: 
+            { 
+                input: allWindows,
+            },
+            outDir: path.join(outDir, "renderer"),
+        }
     },
 }
 

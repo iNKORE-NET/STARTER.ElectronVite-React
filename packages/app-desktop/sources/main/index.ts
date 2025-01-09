@@ -1,9 +1,23 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron"
-import { join } from "path"
-import { electronApp, optimizer, is } from "@electron-toolkit/utils"
-import icon from "../../resources/icon.png?asset"
+import { app, shell, BrowserWindow, ipcMain } from "electron";
+import path from "path";
+import { electronApp, optimizer, is } from "@electron-toolkit/utils";
+import icon from "../../resources/icon.png?asset";
+import { join as joinEx } from "common/path-utils";
 
-function createWindow(): void 
+const isDevMode = is.dev && process.env.ELECTRON_RENDERER_URL !== undefined;
+const appRoot = path.join(__dirname, "..");
+const asarRoot = path.join(appRoot, "..");
+
+const rendererRoot = process?.env?.ELECTRON_RENDERER_URL ?? joinEx(appRoot, "renderer");
+
+
+/** Get the path to the html file for a window in the renderer. */
+function getWindowHtml(windowName: string)
+{
+    return joinEx(rendererRoot, "source/windows", windowName, "index.html");
+}
+
+function createWindow(windowName: string) 
 {
     // Create the browser window.
     const mainWindow = new BrowserWindow
@@ -15,32 +29,41 @@ function createWindow(): void
         ...(process.platform === "linux" ? { icon } : {}),
         webPreferences: 
         {
-            preload: join(__dirname, "../preload/index.js"),
-            sandbox: false, nodeIntegration: true
+            preload: path.join(appRoot, "preload/index.js"),
+            sandbox: false, nodeIntegration: false, contextIsolation: true
         }
-    })
+    });
 
     mainWindow.on("ready-to-show", () => 
     {
         mainWindow.show()
-    })
+    });
 
     mainWindow.webContents.setWindowOpenHandler((details) => 
     {
         shell.openExternal(details.url)
         return { action: "deny" }
-    })
+    });
 
     // HMR for renderer base on electron-vite cli.
     // Load the remote URL for development or the local html file for production.
-    if (is.dev && process.env.ELECTRON_RENDERER_URL) 
-    {
-        mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL)
-    }
-    else 
-    {
-        mainWindow.loadFile(join(__dirname, "../renderer/index.html"))
-    }
+    // if (is.dev && process.env.ELECTRON_RENDERER_URL) 
+    // {
+    //     console.log("Loading remote URL:", process.env.ELECTRON_RENDERER_URL);
+    //     mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL);
+    // }
+    // else 
+    // {
+    //     mainWindow.loadFile(getWindowHtml("main"));
+    // }
+
+    const url = getWindowHtml(windowName);
+    
+    if (isDevMode)
+        mainWindow.loadURL(url);
+    else mainWindow.loadFile(url);
+
+    return mainWindow;
 }
 
 // This method will be called when Electron has finished
@@ -49,7 +72,7 @@ function createWindow(): void
 app.whenReady().then(() => 
 {
     // Set app user model id for windows
-    electronApp.setAppUserModelId("com.electron")
+    electronApp.setAppUserModelId("com.electron");
 
     // Default open or close DevTools by F12 in development
     // and ignore CommandOrControl + R in production.
@@ -57,20 +80,22 @@ app.whenReady().then(() =>
     app.on("browser-window-created", (_, window) => 
     {
         optimizer.watchWindowShortcuts(window)
-    })
+    });
 
     // IPC test
-    ipcMain.on("ping", () => console.log("pong"))
+    ipcMain.on("ping", () => console.log("pong"));
+    ipcMain.on("new-window", () => createWindow("hello"));
+    const mainWindowName = "main";
 
-    createWindow()
+    createWindow(mainWindowName);
 
     app.on("activate", () => 
     {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-        if (BrowserWindow.getAllWindows().length === 0) createWindow()
-    })
-})
+        // On macOS it's common to re-create a window in the app when the
+        // dock icon is clicked and there are no other windows open.
+        if (BrowserWindow.getAllWindows().length === 0) createWindow(mainWindowName);
+    });
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -79,9 +104,9 @@ app.on("window-all-closed", () =>
 {
     if (process.platform !== "darwin") 
     {
-        app.quit()
+        app.quit();
     }
-})
+});
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.

@@ -1,4 +1,13 @@
 {
-  "files": [],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
+    "files":
+    [
+
+    ],
+    "references":
+    [
+        { "path": "./tsconfig.module-main.json" },
+        { "path": "./tsconfig.module-renderer.json" },
+        { "path": "./tsconfig.module-preload.json" },
+        { "path": "./tsconfig.module-common.json" }
+    ],
 }

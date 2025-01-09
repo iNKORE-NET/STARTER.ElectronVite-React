@@ -1,0 +1,13 @@
+{
+    "include": [ "sources/common/**/*" ],
+    "extends": "./tsconfig.env-node.json",
+    "compilerOptions":
+    {
+        "baseUrl": ".",
+        "paths":
+        {
+            "source/*": [ "sources/common/*" ],
+            "module/*": [ "sources/common/*" ]
+        }
+    }
+}
