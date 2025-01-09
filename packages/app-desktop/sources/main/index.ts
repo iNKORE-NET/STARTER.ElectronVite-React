@@ -25,7 +25,7 @@ function createWindow(windowName: string)
         width: 900,
         height: 670,
         show: false,
-        autoHideMenuBar: false,
+        autoHideMenuBar: true,
         ...(process.platform === "linux" ? { icon } : {}),
         webPreferences: 
         {
@@ -84,6 +84,7 @@ app.whenReady().then(() =>
 
     // IPC test
     ipcMain.on("ping", () => console.log("pong"));
+    ipcMain.on("new-window", () => createWindow("hello"));
     const mainWindowName = "main";
 
     createWindow(mainWindowName);

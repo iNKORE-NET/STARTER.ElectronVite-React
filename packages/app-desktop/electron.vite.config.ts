@@ -84,7 +84,7 @@ const CONFIG: ElectronViteConfig =
         
         plugins: 
         [
-            externalizeDepsPlugin(),
+            // externalizeDepsPlugin(),
             react(),
             // bytecodePlugin({ protectedStrings }) // Fck, this plugin is currently not supported in renderer process
         ],

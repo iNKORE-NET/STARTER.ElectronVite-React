@@ -11,6 +11,11 @@ const HomePage: React.FunctionComponent = () =>
 {
     const ipcHandle = (): void => window.electron.ipcRenderer.send("ping");
 
+    const onNewWindow = (): void =>
+    {
+        window.electron.ipcRenderer.send("new-window", { });
+    }
+
     return (
         <Fragment>
             <Helmet>
@@ -40,9 +45,14 @@ const HomePage: React.FunctionComponent = () =>
                     <div className="action">
                         <RouterLink to="/about">About</RouterLink>
                     </div>
+                    <div className="action">
+                        <a target="_blank" rel="noreferrer" onClick={onNewWindow}>
+                            Create New Window
+                        </a>
+                    </div>
                 </div>
-                <Versions></Versions>
-                </div>
+                <Versions/>
+            </div>
         </Fragment>
     )
 }
