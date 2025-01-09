@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { HelmetProvider } from "react-helmet-async";
 
 export type AppWrapperProps = 
 {
@@ -13,7 +14,9 @@ const AppWrapper: React.FunctionComponent<AppWrapperProps> = ({ children }) =>
 {
     return (
         <Fragment>
-            {children}
+            <HelmetProvider>
+                {children}
+            </HelmetProvider>
         </Fragment>
     )
 }
