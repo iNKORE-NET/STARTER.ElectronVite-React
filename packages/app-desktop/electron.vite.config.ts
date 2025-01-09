@@ -15,7 +15,7 @@ const outDir = path.resolve("./.application");
 const allWindows = (() => 
 {
     const pageEntry: any = {};
-    const winsRoot = path.resolve("./sources/renderer/source/windows");
+    const winsRoot = path.resolve("./sources/renderer/entries");
     // glob.sync(path.join(winsRoot, '**/index.html')).forEach((entry) => 
     // {
     //     const pathArr = entry.split('/');
@@ -84,7 +84,7 @@ const CONFIG: ElectronViteConfig =
         
         plugins: 
         [
-            // externalizeDepsPlugin(),
+            externalizeDepsPlugin(),
             react(),
             // bytecodePlugin({ protectedStrings }) // Fck, this plugin is currently not supported in renderer process
         ],

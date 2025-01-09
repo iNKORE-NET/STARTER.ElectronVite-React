@@ -16,7 +16,7 @@
     [
         "sources/renderer/source/env.d.ts",
         "sources/renderer/source/**/*",
-        "sources/renderer/source/**/*.tsx",
+        "sources/renderer/windows/**/*",
         "sources/preload/*.d.ts"
     ],
 }
