@@ -10,9 +10,11 @@ All the technologies used in this project are:
 
 - [TypeScript](https://www.typescriptlang.org/)
 
-- [PNPM](https://pnpm.io/)
-
 - [React](https://react.dev/)
+
+- [React Router](https://reactrouter.com/)
+
+- [PNPM](https://pnpm.io/) (with Workspaces)
 
 ## Getting Started
 
