@@ -14,7 +14,7 @@ const rendererRoot = process?.env?.ELECTRON_RENDERER_URL ?? joinEx(appRoot, "ren
 /** Get the path to the html file for a window in the renderer. */
 function getWindowHtml(windowName: string)
 {
-    return joinEx(rendererRoot, "source/windows", windowName, "index.html");
+    return joinEx(rendererRoot, "entries", windowName, "index.html");
 }
 
 function createWindow(windowName: string) 
@@ -30,7 +30,7 @@ function createWindow(windowName: string)
         webPreferences: 
         {
             preload: path.join(appRoot, "preload/index.js"),
-            sandbox: false, nodeIntegration: false, contextIsolation: true
+            sandbox: false, nodeIntegration: true, contextIsolation: false
         }
     });
 
